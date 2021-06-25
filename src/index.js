@@ -5,6 +5,7 @@ import { displaySprite } from "./helper/sprite.js";
 import { Common } from "./helper/common.js";
 
 import { Bird } from "./Bird.js";
+import { Tube } from "./Tube.js";
 
 import img_snowman from "./images/pic_yukidaruma.png";
 import img_bg from "./images/pic_darksky_bg.jpg";

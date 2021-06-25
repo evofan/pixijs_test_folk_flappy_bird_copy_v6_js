@@ -21,6 +21,7 @@ const TUBE_POS_LIST: number[] = [
 /**
  *
  */
+/*
 class Bird {
   private speedY: number = 0;
   private sprite: PIXI.Sprite = new PIXI.Sprite();
@@ -86,10 +87,12 @@ class Bird {
     setInterval(this.updateTexture, 200);
   }
 }
+*/
 
 /**
  *
  */
+/*
 class Tube {
   private x: number = 0;
   private y: number = 0;
@@ -139,6 +142,7 @@ class Tube {
     this.reset(x);
   }
 }
+*/
 
 /*
 const renderer = PIXI.autoDetectRenderer(canvasWidthHeight, canvasWidthHeight, {
@@ -156,7 +160,7 @@ PIXI.loader.add(BIRD_FRAME_LIST).load(setup);
 */
 
 let bird: any;
-const button: Element | null = document.querySelector("#start");
+// const button: Element | null = document.querySelector("#start");
 
 function setup() {
   bird = new Bird(stage, tubeList, () => {
