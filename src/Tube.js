@@ -1,11 +1,23 @@
 import * as PIXI from "pixi.js";
+
+/**
+ * 
+ */
 export class Tube {
+
+    //
     x = 0;
     y = 0;
     innerDistance = 80;
     tubeWidth = 20;
     sprite = new PIXI.Graphics();
     canvasWidthHeight;
+
+    constructor(displayObject, x, widthHeight) {
+        this.canvasWidthHeight = widthHeight;
+        displayObject.addChild(this.sprite);
+        this.reset(x);
+    }
 
     reset(x = canvasWidthHeight + 20) {
         this.x = x;
@@ -41,11 +53,5 @@ export class Tube {
         this.sprite.drawRect(x, 0, tubeWidth, y);
         this.sprite.drawRect(x, y + innerDistance, tubeWidth, canvasWidthHeight);
         this.sprite.endFill();
-    }
-
-    constructor(displayObject, x, widthHeight) {
-        this.canvasWidthHeight = widthHeight;
-        displayObject.addChild(this.sprite);
-        this.reset(x);
     }
 }
