@@ -10,10 +10,10 @@ module.exports = {
 
   // ローカル開発用環境を立ち上げる
   // 実行時にブラウザが自動的に localhost を開く
-  devServer: {
-    contentBase: "dist",
-    open: true
-  },
+  // devServer: {
+  //  contentBase: "dist",
+  //  open: true
+  // },
 
   // メインとなるJavaScriptファイル（エントリーポイント）
   entry: "./src/index.js",
@@ -75,8 +75,8 @@ module.exports = {
   },
   // performance: { hints: false }
   performance: {
-    maxEntrypointSize: 500000,
-    maxAssetSize: 500000,
+    maxEntrypointSize: 15000000,
+    maxAssetSize: 15000000,
   },
 
   // ES5(IE11等)向けの指定
