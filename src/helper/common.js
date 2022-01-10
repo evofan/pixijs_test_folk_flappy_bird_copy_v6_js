@@ -19,6 +19,7 @@ import * as PIXI from "pixi.js";
  * @param { object } app - reference.
  */
 export const Common = {
+
   pixi_version: `PixiJS: ver.${PIXI.VERSION}`,
 
   getAppRenderSize: app => {
@@ -30,4 +31,5 @@ export const Common = {
     let type = `rederer: ${TYPES[app.renderer.type]}`;
     return type;
   }
+
 };

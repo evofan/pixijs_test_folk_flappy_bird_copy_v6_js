@@ -48,8 +48,8 @@ renderer.render(stage);
 
 // const tubeList = TUBE_POS_LIST.map((idx) => new Tube(stage, idx));
 
-let gameStarted = false;
-let gameFailed = false;
+let isGameStarted = false;
+let isGameFailed = false;
 
 // PIXI.loader.add(BIRD_FRAME_LIST).load(setup);
 
@@ -73,6 +73,7 @@ container.y = 0;
 container.pivot.x = 0;
 container.pivot.y = 0;
 container.interactive = true;
+container.visible = true;
 app.stage.addChild(container);
 
 // click area
@@ -93,10 +94,11 @@ hitArea.visible = true;
 const button = document.querySelector("#start");
 if (button) {
     button.addEventListener("click", () => {
-        gameStarted = true;
+        console.log("button pushed!");
+        isGameStarted = true;
         button.innerHTML = "Retry";
-        if (gameFailed) {
-            gameFailed = false;
+        if (isGameFailed) {
+            isGameFailed = false;
             // tubeList.forEach((d, i) => d.reset(TUBE_POS_LIST[i]));
             // bird.reset();
         }
@@ -104,6 +106,7 @@ if (button) {
     });
 }
 
+// temp bird class test
 let bird = new Bird(container, BIRD_FRAME_LIST, CANVAS_WIDTH_HEIGHT);
 bird.test();
 
@@ -160,7 +163,6 @@ ticker.add(function (time) {
 // container_bg.y = 0;
 // app.stage.addChild(container_bg);
 
-
 ticker.start(); // reder start
 
 /**
@@ -169,27 +171,54 @@ ticker.start(); // reder start
  */
 const update = (time) => {
     console.log("update()")
-
 }
 
-
-
+//テスト用
 /*
 class Bird {
+
+        constructor(){
+            console.log("Bird constructor()");
+        }
+
+        test(){
+            console.log("Bird test()");
+        }
+
+}
+*/
+
+/**
+ * 
+ */
+class Bird {
+
+    // speedY = 0;
+    // sprite = new PIXI.Sprite();
+    // isDied = false;
+    // stextureCounter = 0;
+
+    // 
     speedY = 0;
     sprite = new PIXI.Sprite();
     isDied = false;
-
     textureCounter = 0;
-    updateTexture = () => {
-        if (this.isDied) return;
-        this.sprite.texture =
-            PIXI.loader.resources[BIRD_FRAME_LIST[this.textureCounter++]].texture;
+    sprite_ary;
+    canvasWidthHeight;
+    tubeList;
 
+    updateTexture = () => {
+        console.log("Bird updateTexture()");
+        if (this.isDied) return;
+        // this.sprite.texture =
+            // PIXI.loader.resources[BIRD_FRAME_LIST[this.textureCounter++]].texture;
+            this.sprite.texture = PIXI.Texture.from(this.sprite_ary[this.textureCounter++]);
+        console.log("this.sprite.texture: ", this.sprite.texture);
         if (this.textureCounter === BIRD_FRAME_LIST.length) this.textureCounter = 0;
     };
 
     updateSprite = () => {
+        console.log("Bird updateSprite()");
         this.speedY += GRAVITY / 70;
         this.sprite.y += this.speedY;
         this.sprite.rotation = Math.atan(this.speedY / GAME_SPEED_X);
@@ -209,38 +238,62 @@ class Bird {
     };
 
     addSpeed(speedInc) {
+        console.log("Bird addSpeed()");
         this.speedY += speedInc;
         this.speedY = Math.max(-GRAVITY, this.speedY);
     }
 
     reset() {
-        this.sprite.x = canvasWidthHeight / 6;
-        this.sprite.y = canvasWidthHeight / 2.5;
+        console.log("Bird reset()");
+        this.sprite.x = this.canvasWidthHeight / 6;
+        this.sprite.y = this.canvasWidthHeight / 2.5;
         this.speedY = 0;
         this.isDied = false;
     }
 
+    /**
+     * 
+     * @param {*} stage 
+     * @param {*} tubeList 
+     */
     constructor(
-        stage,
-        tubeList,
-        // onCollision: () => void
+        // stage, // ゲーム用ステージのコンテナ
+        // tubeList, // 鳥のスプライトリスト
+        // onCollision // 当たり判定用、縦横pxか512の小さい方
+        displayObject,// ゲーム表示用ステージのコンテナ
+        spriteAry,// 鳥のスプライトリスト
+        widthHeight// 当たり判定用、縦横pxか512の小さい方
+
     ) {
-        stage.addChild(this.sprite);
+        // console.log("Bird constructor()");
+        // stage.addChild(this.sprite);
+
+        this.sprite_ary = spriteAry;
+        // this.canvasWidthHeight = widthHeight;
+        // this.tubeList = 
+
+        displayObject.addChild(this.sprite);
         this.sprite.anchor.set(0.5, 0.5);
         this.updateTexture();
         this.sprite.scale.x = 0.06;
         this.sprite.scale.y = 0.06;
-        this.reset();
+        this.sprite.x = 100;
+        this.sprite.y = 100;
+        //this.reset();
 
         document.addEventListener("keydown", (e) => {
             if (e.keyCode == 32) this.addSpeed(-GRAVITY / 3);
         });
-        stage.on("pointerdown", () => this.addSpeed(-GRAVITY / 3));
+        // stage.on("pointerdown", () => this.addSpeed(-GRAVITY / 3));
+        displayObject.on("pointerdown", () => this.addSpeed(-GRAVITY / 3));
 
         setInterval(this.updateTexture, 200);
     }
+
+    test() {
+        console.log("Bird test()");
+    }
 }
-*/
 
 /*
 class Tube {
@@ -314,7 +367,7 @@ const button = document.querySelector("#start");
 function setup() {
     bird = new Bird(stage, tubeList, () => {
         // Called when bird hit tube/ground/upper bound
-        gameFailed = true;
+        isGameFailed = true;
         if (button) {
             button.classList.remove("hide");
         }
@@ -322,10 +375,10 @@ function setup() {
     requestAnimationFrame(draw);
 }
 
-let gameStarted = false;
-let gameFailed = false;
+let isGameStarted = false;
+let isGameFailed = false;
 function draw() {
-    if (gameStarted) {
+    if (isGameStarted) {
         bird.updateSprite();
         if (!gameFailed) tubeList.forEach((d) => d.update());
     }
@@ -335,10 +388,10 @@ function draw() {
 
 if (button) {
     button.addEventListener("click", () => {
-        gameStarted = true;
+        isGameStarted = true;
         button.innerHTML = "Retry";
         if (gameFailed) {
-            gameFailed = false;
+            isGameFailed = false;
             tubeList.forEach((d, i) => d.reset(TUBE_POS_LIST[i]));
             bird.reset();
         }
