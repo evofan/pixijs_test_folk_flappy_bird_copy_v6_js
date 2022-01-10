@@ -171,6 +171,7 @@ ticker.add((time) => {
     update(time);
     if (isGameStarted) {
         bird.updateSprite();
+        if (!isGameFailed) tubeList.forEach((d) => d.update());
     } else {
         //console.log("まだスタートしてない");
     }
@@ -205,7 +206,7 @@ const update = (time) => {
     if (isGameStarted) {
         bird.updateSprite();
         if (!isGameFailed) tubeList.forEach((d) => d.update());
-      }
+    }
 
 }
 
@@ -286,8 +287,8 @@ class Bird {
         this.isDied = false; // 死亡フラグをリセット
     }
 
-    onCollision(){
-        console.log("Bird onCollision()");    
+    onCollision() {
+        console.log("Bird onCollision()");
     }
 
     /**
@@ -359,18 +360,13 @@ class Tube {
 }
 */
 
-
-
-/**
- * 
- */
 class Tube {
 
     x = 0; // チューブのx座標
     y = 0; // チューブのy座標
-    innerDistance = 80; // 内部移動距離
-    tubeWidth = 20; // チューブの幅
-    graphics= new PIXI.Graphics(); // チューブ用スプライト
+    innerDistance = 180; // チューブの通り抜けられる部分（縦）のベース
+    tubeWidth = 30; // チューブの横幅
+    graphics = new PIXI.Graphics(); // チューブ用グラフィック
     canvasWidthHeight; // ステージの縦横サイズ
     displayObject;// ゲーム表示用ステージのコンテナ
     widthHeight// 当たり判定用、縦横pxか512の小さい方
@@ -383,6 +379,9 @@ class Tube {
             Math.random() *
             (this.canvasWidthHeight - 2 * tubeMinHeight - this.innerDistance);
         this.y = tubeMinHeight + randomNum;
+        console.log("randomNum: ", randomNum);
+        console.log("tubeMinHeight: ", tubeMinHeight);
+        console.log("y: ", this.y);
     }
 
     checkCollision(x, y, width, height) {
@@ -406,32 +405,37 @@ class Tube {
         console.log("Tube update()");
         this.x -= GAME_SPEED_X / 60; // x座標をゲームスピード/60フレーム分左に進める
         if (this.x < -this.tubeWidth) this.reset(); // 飛騨に移動しきったらリセット
-    
-        /*
-        this.sprite.clear(); // 
-        this.sprite.beginFill(0xffffff, 1);
-        const { x, y, tubeWidth, innerDistance } = this;
-        this.sprite.drawRect(x, 0, tubeWidth, y);
-        this.sprite.drawRect(x, y + innerDistance, tubeWidth, this.canvasWidthHeight);
-        this.sprite.endFill();
-        */
 
         this.graphics.clear(); // 
         this.graphics.beginFill(0xffffff, 1);
-        this.graphics.drawRect(this.x, 0, this.tubeWidth, this.y);
-        this.graphics.drawRect(this.x, this.y + this.innerDistance, this.tubeWidth, this.canvasWidthHeight);
+        const { x, y, tubeWidth, innerDistance } = this;
+        this.graphics.drawRect(x, 0, tubeWidth, y);
+        this.graphics.drawRect(x, y + innerDistance, tubeWidth, this.canvasWidthHeight);
         this.graphics.endFill();
+
+
+        // green move ok
+        /*
+        this.graphics.clear(); // 
+        this.graphics.beginFill(0x008800, 10);
+        this.graphics.drawRect(this.x, 200, 300, 400);
+        this.graphics.endFill();
+        this.displayObject.addChild(this.graphics);
+        */
 
     }
 
-    constructor(displayObject, x, widthHeight) {
-        /*
-        console.log("Tube constructor()");
+    constructor(displayObject, x, idx, widthHeight) {
+
+        console.log("Tube constructor()", x, idx);
+        this.displayObject = displayObject;
+        this.widthHeight = widthHeight;
         displayObject.addChild(this.graphics);
-        this.reset(x);
         this.canvasWidthHeight = widthHeight;
+        this.reset(x);
+
         // this.canvasWidthHeight = CANVAS_WIDTH_HEIGHT; // temp
-        */
+
 
         console.log("Tube constructor2)");
         this.graphics.clear(); // 
@@ -448,7 +452,7 @@ class Tube {
 }
 
 
-let tubeList = TUBE_POS_LIST.map((d) => new Tube(container, d, CANVAS_WIDTH_HEIGHT));
+let tubeList = TUBE_POS_LIST.map((d, idx) => new Tube(container, d, idx, CANVAS_WIDTH_HEIGHT));
 
 // let bird = new Bird(container, BIRD_FRAME_LIST, CANVAS_WIDTH_HEIGHT);
 bird = new Bird(container, BIRD_FRAME_LIST, CANVAS_WIDTH_HEIGHT, tubeList, () => {
@@ -462,7 +466,7 @@ bird = new Bird(container, BIRD_FRAME_LIST, CANVAS_WIDTH_HEIGHT, tubeList, () =>
 
 /*
 const renderer = PIXI.autoDetectRenderer(canvasWidthHeight, canvasWidthHeight, {
-    backgroundColor: 0xc1c2c4,
+    backgroundColor: 0xc1c2c4ｙ
 });
 document.body.appendChild(renderer.view);
 const stage = new PIXI.Container();
