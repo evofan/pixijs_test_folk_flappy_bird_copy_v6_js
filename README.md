@@ -13,3 +13,8 @@ reference
 
 **evofan / pixijs_test_folk_flappy_bird_copy**  
 [https://github.com/evofan/pixijs_test_folk_flappy_bird_copy](https://github.com/evofan/pixijs_test_folk_flappy_bird_copy)  
+
+**pixi.js - PIXI how to completely remove a sprite - Stack Overflow**  
+[https://stackoverflow.com/questions/56333613/pixi-how-to-completely-remove-a-sprite](https://stackoverflow.com/questions/56333613/pixi-how-to-completely-remove-a-sprite)  
+>then you need to both use removeChild as you did, but also clear the mySprite reference.  
+>
