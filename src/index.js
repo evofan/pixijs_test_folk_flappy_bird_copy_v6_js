@@ -99,16 +99,22 @@ if (button) {
         button.innerHTML = "Retry";
         if (isGameFailed) {
             isGameFailed = false;
-            // tubeList.forEach((d, i) => d.reset(TUBE_POS_LIST[i]));
-            // bird.reset();
+            tubeList.forEach((d, i) => d.reset(TUBE_POS_LIST[i]));
+            bird.reset();
         }
-        button.classList.add("hide");
+        //button.classList.add("hide");
     });
 }
 
+// ボタン押下で開始に
 // temp bird class test
-let bird = new Bird(container, BIRD_FRAME_LIST, CANVAS_WIDTH_HEIGHT);
-bird.test();
+// let bird = new Bird(container, BIRD_FRAME_LIST, CANVAS_WIDTH_HEIGHT);
+// bird.test();
+
+// let tube = new Tube(container, 100, CANVAS_WIDTH_HEIGHT);
+// tube.test();
+let bird;
+// let tube;
 
 // console.log(img_cat); // data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAA.....
 
@@ -129,6 +135,23 @@ displayParamText(app, ver, 230);
 displayParamText(app, size, 260);
 displayParamText(app, type, 290);
 
+//let tubeList = TUBE_POS_LIST.map((d) => new Tube(container, d, CANVAS_WIDTH_HEIGHT));
+// const tubeList = TUBE_POS_LIST.map((d) => new Tube(container, d));
+
+//const tubeList = TUBE_POS_LIST.map((d) => new Tube(displayObject, d));
+// tubeList.forEach((d, i) => d.reset(TUBE_POS_LIST[i]));
+/*
+let tubeList = [];
+for (let i = 0; i < TUBE_POS_LIST.length; i++) {
+    console.log(i);
+    let temp;
+    temp = new Tube(container, i, CANVAS_WIDTH_HEIGHT);
+    tubeList.push(temp);
+}
+*/
+
+// requestAnimationFrame(draw);
+
 //// Main
 
 // v5 ticker
@@ -146,6 +169,11 @@ ticker.add((time) => {
     // app.renderer;
     // console.log("render...", time);
     update(time);
+    if (isGameStarted) {
+        bird.updateSprite();
+    } else {
+        //console.log("まだスタートしてない");
+    }
 });
 /*
 // You may use the shared ticker to render...
@@ -163,6 +191,7 @@ ticker.add(function (time) {
 // container_bg.y = 0;
 // app.stage.addChild(container_bg);
 
+// ボタン押下で開始に
 ticker.start(); // reder start
 
 /**
@@ -170,91 +199,102 @@ ticker.start(); // reder start
  * @param { number } time
  */
 const update = (time) => {
-    console.log("update()")
-}
+    //console.log("update()")
+    // 得点表示等に使用
 
-//テスト用
-/*
-class Bird {
-
-        constructor(){
-            console.log("Bird constructor()");
-        }
-
-        test(){
-            console.log("Bird test()");
-        }
+    if (isGameStarted) {
+        bird.updateSprite();
+        if (!isGameFailed) tubeList.forEach((d) => d.update());
+      }
 
 }
-*/
 
 /**
- * 
+ * 鳥のクラス
  */
 class Bird {
 
-    // speedY = 0;
-    // sprite = new PIXI.Sprite();
-    // isDied = false;
-    // stextureCounter = 0;
-
     // 
-    speedY = 0;
-    sprite = new PIXI.Sprite();
-    isDied = false;
-    textureCounter = 0;
-    sprite_ary;
-    canvasWidthHeight;
-    tubeList;
+    speedY = 0; // 鳥のy座標移動スピード
+    sprite = new PIXI.Sprite(); // 鳥用スプライト
+    isDied = false; // 鳥の死亡フラグ
+    textureCounter = 0; // 鳥のスプライトアニメ表示切り替え用カウンター
+    sprite_ary; // 鳥のスプライトアニメ画像リスト
+    canvasWidthHeight; // ステージの縦横サイズ
+    tubeList; // 
 
+    /**
+     * Bird Animation
+     * 鳥のアニメーション
+     * @returns 
+     */
     updateTexture = () => {
         console.log("Bird updateTexture()");
-        if (this.isDied) return;
+        if (this.isDied) return; // 死んでいたらキャンセル
+        // if (!this.isGameStarted) return;
         // this.sprite.texture =
-            // PIXI.loader.resources[BIRD_FRAME_LIST[this.textureCounter++]].texture;
-            this.sprite.texture = PIXI.Texture.from(this.sprite_ary[this.textureCounter++]);
-        console.log("this.sprite.texture: ", this.sprite.texture);
-        if (this.textureCounter === BIRD_FRAME_LIST.length) this.textureCounter = 0;
+        // PIXI.loader.resources[BIRD_FRAME_LIST[this.textureCounter++]].texture;
+        this.sprite.texture = PIXI.Texture.from(this.sprite_ary[this.textureCounter++]);
+        // console.log("this.sprite.texture: ", this.sprite.texture);
+        if (this.textureCounter === BIRD_FRAME_LIST.length) this.textureCounter = 0; // 最後まで再生でリセット
     };
 
+    /**
+     * Bird Move and Collision
+     * 鳥の移動と当たり判定のチェック
+     */
     updateSprite = () => {
         console.log("Bird updateSprite()");
-        this.speedY += GRAVITY / 70;
-        this.sprite.y += this.speedY;
+        this.speedY += GRAVITY / 70; // 重力を加算
+        this.sprite.y += this.speedY; // 鳥のy座標を移動
         this.sprite.rotation = Math.atan(this.speedY / GAME_SPEED_X);
 
-        let isCollide = false;
-        const { x, y, width, height } = this.sprite;
-        this.tubeList.forEach((d) => {
+        let isCollide = false; // 当たり判定をリセット
+        const { x, y, width, height } = this.sprite; // 鳥の各プロパティを取得
+        this.tubeList.forEach((d) => { // チューブとの当たり判定をチェック
             if (d.checkCollision(x - width / 2, y - height / 2, width, height))
                 isCollide = true;
         });
-        if (y < -height / 2 || y > canvasWidthHeight + height / 2) isCollide = true;
+        if (y < -height / 2 || y > this.canvasWidthHeight + height / 2) isCollide = true; // 壁との当たり判定をチェック
 
-        if (isCollide) {
+        if (isCollide) { // 当たり時の処理
             this.onCollision();
-            this.isDied = true;
+            this.isDied = true; // 死亡フラグをtrueに
         }
     };
 
+    /**
+     * Bird y speed
+     * 鳥のy方向のスピードを加算する
+     * @param {*} speedInc 
+     */
     addSpeed(speedInc) {
         console.log("Bird addSpeed()");
-        this.speedY += speedInc;
-        this.speedY = Math.max(-GRAVITY, this.speedY);
+        this.speedY += speedInc; // y方向スピードにスピード増加分を加算
+        this.speedY = Math.max(-GRAVITY, this.speedY); // マイナスした重力かy方向のスピードの大きい方を使用
     }
 
+    /**
+     * Bird property reset
+     * 鳥のプロパティのリセット
+     */
     reset() {
         console.log("Bird reset()");
         this.sprite.x = this.canvasWidthHeight / 6;
         this.sprite.y = this.canvasWidthHeight / 2.5;
-        this.speedY = 0;
-        this.isDied = false;
+        this.speedY = 0; // スピードを0に＝停止
+        this.isDied = false; // 死亡フラグをリセット
+    }
+
+    onCollision(){
+        console.log("Bird onCollision()");    
     }
 
     /**
-     * 
-     * @param {*} stage 
-     * @param {*} tubeList 
+     * Bird constructor
+     * @param {*} displayObject // ゲーム表示用ステージのコンテナ
+     * @param {*} spriteAry // 鳥のスプライトリスト
+     * @param {*} widthHeight // 当たり判定用、縦横pxか512の小さい方
      */
     constructor(
         // stage, // ゲーム用ステージのコンテナ
@@ -262,24 +302,27 @@ class Bird {
         // onCollision // 当たり判定用、縦横pxか512の小さい方
         displayObject,// ゲーム表示用ステージのコンテナ
         spriteAry,// 鳥のスプライトリスト
-        widthHeight// 当たり判定用、縦横pxか512の小さい方
+        widthHeight,// 当たり判定用、縦横pxか512の小さい方
+        tubeList
 
     ) {
-        // console.log("Bird constructor()");
+        console.log("Bird constructor()");
         // stage.addChild(this.sprite);
 
         this.sprite_ary = spriteAry;
-        // this.canvasWidthHeight = widthHeight;
-        // this.tubeList = 
+        this.canvasWidthHeight = widthHeight;
+        this.tubeList = tubeList;
 
         displayObject.addChild(this.sprite);
         this.sprite.anchor.set(0.5, 0.5);
         this.updateTexture();
         this.sprite.scale.x = 0.06;
         this.sprite.scale.y = 0.06;
-        this.sprite.x = 100;
-        this.sprite.y = 100;
-        //this.reset();
+        //this.sprite.x = 100;
+        //this.sprite.y = 100;
+
+        this.reset();
+        // this.sprite.stop();// 明示的に停止しないとアニメスタートしてしまうので
 
         document.addEventListener("keydown", (e) => {
             if (e.keyCode == 32) this.addSpeed(-GRAVITY / 3);
@@ -287,32 +330,63 @@ class Bird {
         // stage.on("pointerdown", () => this.addSpeed(-GRAVITY / 3));
         displayObject.on("pointerdown", () => this.addSpeed(-GRAVITY / 3));
 
+        // ここでセットインターバルで回すか、tickerの方で統一するか
         setInterval(this.updateTexture, 200);
     }
 
+    /**
+     * for test
+     */
     test() {
         console.log("Bird test()");
     }
 }
 
+
 /*
 class Tube {
-    x = 0;
-    y = 0;
-    innerDistance = 80;
-    tubeWidth = 20;
-    sprite = new PIXI.Graphics();
 
-    reset(x = canvasWidthHeight + 20) {
+    constructor(displayObject, x, wh) {
+        // stage.addChild(this.sprite);
+        // this.reset(x);
+        console.log("Tube constructor():", displayObject, x, wh);
+    }
+
+    test() {
+        console.log("Tube test()");
+    }
+
+}
+*/
+
+
+
+/**
+ * 
+ */
+class Tube {
+
+    x = 0; // チューブのx座標
+    y = 0; // チューブのy座標
+    innerDistance = 80; // 内部移動距離
+    tubeWidth = 20; // チューブの幅
+    graphics= new PIXI.Graphics(); // チューブ用スプライト
+    canvasWidthHeight; // ステージの縦横サイズ
+    displayObject;// ゲーム表示用ステージのコンテナ
+    widthHeight// 当たり判定用、縦横pxか512の小さい方
+
+    reset(x = this.canvasWidthHeight + 20) {
+        console.log("Tube reset()");
         this.x = x;
         const tubeMinHeight = 60;
         const randomNum =
             Math.random() *
-            (canvasWidthHeight - 2 * tubeMinHeight - this.innerDistance);
+            (this.canvasWidthHeight - 2 * tubeMinHeight - this.innerDistance);
         this.y = tubeMinHeight + randomNum;
     }
 
     checkCollision(x, y, width, height) {
+        console.log("Tube checkCollision()");
         if (!(x + width < this.x || this.x + this.tubeWidth < x || this.y < y)) {
             return true;
         }
@@ -329,23 +403,62 @@ class Tube {
     }
 
     update() {
-        this.x -= GAME_SPEED_X / 60;
-        if (this.x < -this.tubeWidth) this.reset();
-
-        this.sprite.clear();
+        console.log("Tube update()");
+        this.x -= GAME_SPEED_X / 60; // x座標をゲームスピード/60フレーム分左に進める
+        if (this.x < -this.tubeWidth) this.reset(); // 飛騨に移動しきったらリセット
+    
+        /*
+        this.sprite.clear(); // 
         this.sprite.beginFill(0xffffff, 1);
         const { x, y, tubeWidth, innerDistance } = this;
         this.sprite.drawRect(x, 0, tubeWidth, y);
-        this.sprite.drawRect(x, y + innerDistance, tubeWidth, canvasWidthHeight);
+        this.sprite.drawRect(x, y + innerDistance, tubeWidth, this.canvasWidthHeight);
         this.sprite.endFill();
+        */
+
+        this.graphics.clear(); // 
+        this.graphics.beginFill(0xffffff, 1);
+        this.graphics.drawRect(this.x, 0, this.tubeWidth, this.y);
+        this.graphics.drawRect(this.x, this.y + this.innerDistance, this.tubeWidth, this.canvasWidthHeight);
+        this.graphics.endFill();
+
     }
 
-    constructor(stage, x) {
-        stage.addChild(this.sprite);
+    constructor(displayObject, x, widthHeight) {
+        /*
+        console.log("Tube constructor()");
+        displayObject.addChild(this.graphics);
         this.reset(x);
+        this.canvasWidthHeight = widthHeight;
+        // this.canvasWidthHeight = CANVAS_WIDTH_HEIGHT; // temp
+        */
+
+        console.log("Tube constructor2)");
+        this.graphics.clear(); // 
+        this.graphics.beginFill(0xff0033, 10);
+        this.graphics.drawRect(50, 100, 200, 300);
+        this.graphics.endFill();
+        displayObject.addChild(this.graphics);
     }
+
+    test() {
+        console.log("Tube test()");
+    }
+
 }
-*/
+
+
+let tubeList = TUBE_POS_LIST.map((d) => new Tube(container, d, CANVAS_WIDTH_HEIGHT));
+
+// let bird = new Bird(container, BIRD_FRAME_LIST, CANVAS_WIDTH_HEIGHT);
+bird = new Bird(container, BIRD_FRAME_LIST, CANVAS_WIDTH_HEIGHT, tubeList, () => {
+    // Called when bird hit tube/ground/upper bound
+    isGameFailed = true;
+    if (button) {
+        button.classList.remove("hide");
+    }
+});
+
 
 /*
 const renderer = PIXI.autoDetectRenderer(canvasWidthHeight, canvasWidthHeight, {
