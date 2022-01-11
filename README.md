@@ -1,11 +1,13 @@
 # Test the flappy bird copy sample, another ver.
 
+<img src="https://evofan.github.io/pixijs_test_folk_flappy_bird_copy_v6_js/screenshot/pid_screenshot1.jpg" width="50%">  
+
 Demo  
 [https://evofan.github.io/pixijs_test_folk_flappy_bird_copy_v6_js/dist/](https://evofan.github.io/pixijs_test_folk_flappy_bird_copy_v6_js/dist/)  
 
 memo  
 
-Change PixiJS 4.5.4 -> 6.x  
+Change PixiJS 4.5.4 -> 6.x.x  
 Change TS -> JS  
 Add webpack  
 
