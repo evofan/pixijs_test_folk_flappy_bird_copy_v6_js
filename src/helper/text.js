@@ -17,20 +17,23 @@ export const displayDateText = (app) => {
   // console.log("dtText", dtText); // dtText 2019.7.2.Thu
 
   // Text
-  let textDate = new PIXI.Text(`Today: ${dtText}`, {
+  // let textDate = new PIXI.Text(`Today: ${dtText}`, {
+  let textDate = new PIXI.Text(`PixiJS Flappy Bird clone test`, {
     fontFamily: "Arial",
     fontSize: 24,
     // fill: 0x3366cc,
     fill: 0x333333,
+    fill: 0x000000,
     align: "center",
     fontWeight: "bold",
     stroke: "#cccccc",
+    stroke: "#ffffff",
     strokeThickness: 4,
     dropShadow: false,
     dropShadowColor: "#666666",
     lineJoin: "round"
   });
-  textDate.x = 110;
+  textDate.x = 100;
   textDate.y = 10;
   app.stage.addChild(textDate);
 }
@@ -46,6 +49,7 @@ export const displayParamText = (app, str, y) => {
     fontFamily: "Arial",
     fontSize: 16,
     fill: 0xe0e0e0,
+    fill: 0x3399cc,
     align: "left",
     fontWeight: "bold",
     lineJoin: "round"
