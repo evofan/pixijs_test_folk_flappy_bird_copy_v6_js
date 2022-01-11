@@ -294,8 +294,10 @@ class Bird {
     /**
      * Bird constructor
      * @param {*} displayObject // ゲーム表示用ステージのコンテナ
-     * @param {*} spriteAry // 鳥のスプライトリスト
-     * @param {*} widthHeight // 当たり判定用、縦横pxか512の小さい方
+     * @param {array} spriteAry // 鳥のスプライトリスト
+     * @param {number} widthHeight // 周囲の壁当たり判定用、縦横pxか512の小さい方
+     * @param {array} tubeList // 各チューブの情報
+     * @param {function} func // 衝突時に実行される命令
      */
     constructor(
         // stage, // ゲーム用ステージのコンテナ
@@ -304,7 +306,8 @@ class Bird {
         displayObject,// ゲーム表示用ステージのコンテナ
         spriteAry,// 鳥のスプライトリスト
         widthHeight,// 当たり判定用、縦横pxか512の小さい方
-        tubeList
+        tubeList, // チューブの配列
+        func // 当たり判定時に実行、クラス生成時に無名関数で渡される＝考え方
 
     ) {
         console.log("Bird constructor()");
@@ -313,6 +316,7 @@ class Bird {
         this.sprite_ary = spriteAry;
         this.canvasWidthHeight = widthHeight;
         this.tubeList = tubeList;
+        this.onCollision = func;
 
         displayObject.addChild(this.sprite);
         this.sprite.anchor.set(0.5, 0.5);
@@ -364,13 +368,16 @@ class Tube {
 
     x = 0; // チューブのx座標
     y = 0; // チューブのy座標
-    innerDistance = 180; // チューブの通り抜けられる部分（縦）のベース
+    innerDistance = 180; // チューブの通り抜けられる部分（縦幅）のベース
     tubeWidth = 30; // チューブの横幅
     graphics = new PIXI.Graphics(); // チューブ用グラフィック
     canvasWidthHeight; // ステージの縦横サイズ
     displayObject;// ゲーム表示用ステージのコンテナ
-    widthHeight// 当たり判定用、縦横pxか512の小さい方
 
+    /**
+     * チューブの描画をリセットする、パラメーターを初期化する
+     * @param {*} x 
+     */
     reset(x = this.canvasWidthHeight + 20) {
         console.log("Tube reset()");
         this.x = x;
@@ -384,6 +391,14 @@ class Tube {
         console.log("y: ", this.y);
     }
 
+    /**
+     * 衝突判定する
+     * @param {*} x 
+     * @param {*} y 
+     * @param {*} width 
+     * @param {*} height 
+     * @returns 
+     */
     checkCollision(x, y, width, height) {
         console.log("Tube checkCollision()");
         if (!(x + width < this.x || this.x + this.tubeWidth < x || this.y < y)) {
@@ -401,41 +416,41 @@ class Tube {
         return false;
     }
 
+    /**
+     * チューブの描画を更新する＝チューブが移動する
+     */
     update() {
-        console.log("Tube update()");
+        // console.log("Tube update()");
         this.x -= GAME_SPEED_X / 60; // x座標をゲームスピード/60フレーム分左に進める
-        if (this.x < -this.tubeWidth) this.reset(); // 飛騨に移動しきったらリセット
+        if (this.x < -this.tubeWidth) this.reset(); // 画面左に移動しきったらリセット
 
-        this.graphics.clear(); // 
+        // 描画
+        this.graphics.clear();
         this.graphics.beginFill(0xffffff, 1);
-        const { x, y, tubeWidth, innerDistance } = this;
-        this.graphics.drawRect(x, 0, tubeWidth, y);
-        this.graphics.drawRect(x, y + innerDistance, tubeWidth, this.canvasWidthHeight);
+        const { x, y, tubeWidth, innerDistance } = this; // 分割代入
+        this.graphics.drawRect(x, 0, tubeWidth, y); // 通り抜ける穴の上部分
+        this.graphics.drawRect(x, y + innerDistance, tubeWidth, this.canvasWidthHeight);// 通り抜ける穴の下部分
         this.graphics.endFill();
-
-
-        // green move ok
-        /*
-        this.graphics.clear(); // 
-        this.graphics.beginFill(0x008800, 10);
-        this.graphics.drawRect(this.x, 200, 300, 400);
-        this.graphics.endFill();
-        this.displayObject.addChild(this.graphics);
-        */
 
     }
 
+    /**
+     * コンストラクタ
+     * @param {*} displayObject 
+     * @param {*} x 
+     * @param {*} idx チューブの本数確認用テスト
+     * @param {*} widthHeight 
+     */
     constructor(displayObject, x, idx, widthHeight) {
 
         console.log("Tube constructor()", x, idx);
         this.displayObject = displayObject;
-        this.widthHeight = widthHeight;
-        displayObject.addChild(this.graphics);
         this.canvasWidthHeight = widthHeight;
+        displayObject.addChild(this.graphics);
+
         this.reset(x);
 
         // this.canvasWidthHeight = CANVAS_WIDTH_HEIGHT; // temp
-
 
         console.log("Tube constructor2)");
         this.graphics.clear(); // 
@@ -457,6 +472,7 @@ let tubeList = TUBE_POS_LIST.map((d, idx) => new Tube(container, d, idx, CANVAS_
 // let bird = new Bird(container, BIRD_FRAME_LIST, CANVAS_WIDTH_HEIGHT);
 bird = new Bird(container, BIRD_FRAME_LIST, CANVAS_WIDTH_HEIGHT, tubeList, () => {
     // Called when bird hit tube/ground/upper bound
+    console.log("★何かと衝突した！");
     isGameFailed = true;
     if (button) {
         button.classList.remove("hide");
