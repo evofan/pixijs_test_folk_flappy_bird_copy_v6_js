@@ -4,7 +4,7 @@ import { displayParamText } from "./helper/text.js";
 import { displaySprite } from "./helper/sprite.js";
 import { Common } from "./helper/common.js";
 
-import { STAGES, BIRD } from "./constants";
+import { STAGES, BIRD, VARS, displayScore } from "./constants";
 import { Bird } from "./Bird.js";
 import { Tube } from "./Tube.js";
 
@@ -61,11 +61,14 @@ if (button) {
     button.addEventListener("click", () => {
         console.log("button pushed!");
         isGameStarted = true;
+        VARS.score = 0;
         button.innerHTML = "Retry";
         if (isGameFailed) {
             isGameFailed = false;
             tubeList.forEach((d, i) => d.reset(TUBE_POS_LIST[i]));
             bird.reset();
+            VARS.score = 0;
+            displayScore(container, 2);
         }
         button.classList.add("hide");
     });
@@ -73,6 +76,7 @@ if (button) {
 
 let bird;
 let tubeList;
+
 
 // Execute the method defined in text.js
 displayDateText(app);
@@ -85,7 +89,9 @@ let type = Common.getAppRenderType(app);
 // display Pixi data
 displayParamText(app, ver, 450);
 displayParamText(app, size, 470);
-displayParamText(app, type, 490);
+displayParamText(app, type, 490)
+
+displayScore(container, 0);
 
 
 //// Main
@@ -137,7 +143,7 @@ const update = (time) => {
 
 }
 
-tubeList = TUBE_POS_LIST.map((d, idx) => new Tube(container, d, idx, STAGES.CANVAS_WIDTH_HEIGHT));
+tubeList = TUBE_POS_LIST.map((d, idx) => new Tube(container, d, idx, STAGES.CANVAS_WIDTH_HEIGHT, container));
 
 bird = new Bird(container, BIRD.BIRD_FRAME_LIST, STAGES.CANVAS_WIDTH_HEIGHT, tubeList, () => {
     // console.log("Called when bird hit tube/ground/upper bound");

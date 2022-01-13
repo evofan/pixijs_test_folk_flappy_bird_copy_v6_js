@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js";
-import { STAGES } from "./constants";
+import { STAGES, VARS, displayScore } from "./constants";
 
 export class Tube {
 
@@ -13,6 +13,8 @@ export class Tube {
     graphics3 = new PIXI.Graphics();
     canvasWidthHeight; // ステージの縦横サイズ
     displayObject;// ゲーム表示用ステージのコンテナ
+    scoreFlag = true; // スコア加算フラグ
+    container; // 参照
 
     /**
      * チューブの描画をリセットする、パラメーターを初期化する
@@ -29,6 +31,7 @@ export class Tube {
         console.log("randomNum: ", randomNum);
         console.log("tubeMinHeight: ", tubeMinHeight);
         console.log("y: ", this.y);
+        this.scoreFlag = true;
     }
 
     /**
@@ -62,6 +65,7 @@ export class Tube {
     update() {
         // console.log("Tube update()");
         this.x -= STAGES.GAME_SPEED_X / 60; // x座標をゲームスピード/60フレーム分左に進める
+        if (this.x - 100 < -this.tubeWidth) this.addScore(); // チューブを通り抜けられた場合に得点を加算
         if (this.x < -this.tubeWidth) this.reset(); // 画面左に移動しきったらリセット
 
         this.graphics1.clear();
@@ -79,17 +83,32 @@ export class Tube {
     }
 
     /**
+     * 得点を加算する（鳥がチューブを通過）
+     */
+    addScore() {
+        if (this.scoreFlag) {
+            this.scoreFlag = false;
+            VARS.score = VARS.score + 1;
+            console.log("得点追加！", VARS.score);
+            displayScore(this.container, 1);
+        }
+
+    }
+
+    /**
      * コンストラクタ
      * @param {object} displayObject チューブを表示するコンテナ
      * @param {number} x チューブの本数分のx開始位置
      * @param {number} idx チューブの本数確認用テスト
      * @param {number} widthHeight ステージサイズ
+     * @param {object} container 参照
      */
-    constructor(displayObject, x, idx, widthHeight) {
+    constructor(displayObject, x, idx, widthHeight, container) {
 
         console.log("Tube constructor()", x, idx);
         this.displayObject = displayObject;
         this.canvasWidthHeight = widthHeight;
+        this.container = container;
         displayObject.addChild(this.graphics);
 
         this.reset(x);

@@ -1,4 +1,5 @@
 import * as PIXI from "pixi.js";
+import { VARS } from "../constants";
 
 /**
  * Define the displayDateText() function using the export statement.
@@ -58,3 +59,26 @@ export const displayParamText = (app, str, y) => {
   textParam.y = y;
   app.stage.addChild(textParam);
 }
+
+/*
+export const displayScore = (app) => {
+  let textParam = new PIXI.Text(`Score: ${VARS.score}`, {
+    fontFamily: "Arial",
+    fontSize: 32,
+    fill: 0xff0033,
+    align: "right",
+    fontWeight: "bold",
+    lineJoin: "round"
+  });
+  textParam.x = 350;
+  textParam.y = 450;
+  */
+  /*
+  if (app.stage.getChildByName(textParam)) {
+    app.stage.removeChild(textParam)
+  }*/
+ // if (app.stage.getChildAt(0)) {
+   // app.stage.removeChild(textParam)
+ // }
+ // app.stage.addChild(textParam);
+//}
