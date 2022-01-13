@@ -1,6 +1,6 @@
 # Test the flappy bird copy sample, another ver.
 
-<img src="https://evofan.github.io/pixijs_test_folk_flappy_bird_copy_v6_js/screenshot/pid_screenshot1.jpg" width="50%">  
+<img src="https://evofan.github.io/pixijs_test_folk_flappy_bird_copy_v6_js/screenshot/pic_screenshot2.png" width="50%">  
 
 Demo  
 [https://evofan.github.io/pixijs_test_folk_flappy_bird_copy_v6_js/dist/](https://evofan.github.io/pixijs_test_folk_flappy_bird_copy_v6_js/dist/)  
@@ -23,4 +23,7 @@ reference
 **Uncaught ReferenceError: Cannot access ”＊＊＊” before initialization at - Qiita**  
 [https://qiita.com/tetsu-upstr/items/c15fd0408244db16ed44](https://qiita.com/tetsu-upstr/items/c15fd0408244db16ed44)  
 >実行コードより後に定義した引数を使用した場合や、スコープの外から呼び出した時に表示されるエラーです。  
->
+
+**how do you use getchild? - Pixi.js - HTML5 Game Devs Forum**  
+[https://www.html5gamedevs.com/topic/44825-how-do-you-use-getchild/](https://www.html5gamedevs.com/topic/44825-how-do-you-use-getchild/)  
+
