@@ -8,6 +8,8 @@ import { STAGES, BIRD, VARS, displayScore } from "./constants";
 import { Bird } from "./Bird.js";
 import { Tube } from "./Tube.js";
 
+import img_bg from "./images/pic_bg_sea2.jpg";
+
 import "./main.css";
 
 const TUBE_POS_LIST = [
@@ -29,6 +31,7 @@ let container_bg = new PIXI.Container();
 container_bg.x = 0;
 container_bg.y = 0;
 app.stage.addChild(container_bg);
+displaySprite(app, img_bg, 0, 0);
 
 // bird, wall area
 let container = new PIXI.Container();

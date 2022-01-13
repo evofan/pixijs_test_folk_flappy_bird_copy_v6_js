@@ -61,6 +61,11 @@ export const displayScore = (container, num) => {
         fill: 0xff0033,
         align: "right",
         fontWeight: "bold",
+        stroke: "#cccccc",
+        stroke: "#ffffff",
+        strokeThickness: 4,
+        dropShadow: false,
+        dropShadowColor: "#666666",
         lineJoin: "round"
     });
     console.log("表示する");

@@ -12,5 +12,5 @@ export const displaySprite = (app, img, x, y, scalex = 1, scaley = 1) => {
   sprite.y = y;
   sprite.scale.x = scalex;
   sprite.scale.y = scaley;
-  app.stage.addChild(sprite);
+  app.stage.addChild(sprite); // app.stage or container(others)?
 }

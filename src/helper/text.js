@@ -53,6 +53,11 @@ export const displayParamText = (app, str, y) => {
     fill: 0x3399cc,
     align: "left",
     fontWeight: "bold",
+    stroke: "#cccccc",
+    stroke: "#003366",
+    strokeThickness: 4,
+    dropShadow: false,
+    dropShadowColor: "#666666",
     lineJoin: "round"
   });
   textParam.x = 15;
