@@ -1,6 +1,6 @@
 # Test the flappy bird copy sample, another ver.
 
-<img src="https://evofan.github.io/pixijs_test_folk_flappy_bird_copy_v6_js/screenshot/pic_screenshot2.png" width="50%">  
+<img src="https://evofan.github.io/pixijs_test_folk_flappy_bird_copy_v6_js/screenshot/pic_screenshot3.jpg" width="50%">  
 
 Demo  
 [https://evofan.github.io/pixijs_test_folk_flappy_bird_copy_v6_js/dist/](https://evofan.github.io/pixijs_test_folk_flappy_bird_copy_v6_js/dist/)  
@@ -8,8 +8,10 @@ Demo
 memo  
 
 Change PixiJS 4.5.4 -> 6.x.x  
-Change TS -> JS  
+Change TypeScript -> JavaScript  
 Add webpack  
+Add score display  
+Add background image  
 
 reference  
 
