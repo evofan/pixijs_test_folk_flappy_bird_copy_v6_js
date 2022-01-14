@@ -5,6 +5,13 @@
 Demo  
 [https://evofan.github.io/pixijs_test_folk_flappy_bird_copy_v6_js/dist/](https://evofan.github.io/pixijs_test_folk_flappy_bird_copy_v6_js/dist/)  
 
+Usage  
+`npm install`  
+`npm run build`  
+`npm run start`  
+
+http://localhost:8080/  
+
 memo  
 
 Change PixiJS 4.5.4 -> 6.x.x  
