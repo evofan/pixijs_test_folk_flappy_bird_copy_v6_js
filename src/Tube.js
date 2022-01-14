@@ -14,7 +14,7 @@ export class Tube {
     canvasWidthHeight; // ステージの縦横サイズ
     displayObject;// ゲーム表示用ステージのコンテナ
     scoreFlag = true; // スコア加算フラグ
-    container; // 参照
+    ccontainer_score; // 参照
 
     /**
      * チューブの描画をリセットする、パラメーターを初期化する
@@ -90,7 +90,7 @@ export class Tube {
             this.scoreFlag = false;
             VARS.score = VARS.score + 1;
             console.log("得点追加！", VARS.score);
-            displayScore(this.container, 1);
+            displayScore(this.container_score, 1);
         }
 
     }
@@ -101,14 +101,14 @@ export class Tube {
      * @param {number} x チューブの本数分のx開始位置
      * @param {number} idx チューブの本数確認用テスト
      * @param {number} widthHeight ステージサイズ
-     * @param {object} container 参照
+     * @param {object} container_score 参照
      */
-    constructor(displayObject, x, idx, widthHeight, container) {
+    constructor(displayObject, x, idx, widthHeight, container_score) {
 
         console.log("Tube constructor()", x, idx);
         this.displayObject = displayObject;
         this.canvasWidthHeight = widthHeight;
-        this.container = container;
+        this.container_score = container_score;
         displayObject.addChild(this.graphics);
 
         this.reset(x);

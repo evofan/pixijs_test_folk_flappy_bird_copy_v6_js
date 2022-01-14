@@ -18,7 +18,7 @@ export class Bird {
      */
     updateTexture = () => {
         //　console.log("Bird updateTexture()");
-        if (this.isDied) return; // 死んでいたらキャンセル
+        if (this.isDied) return;
         // this.sprite.texture =
         // PIXI.loader.resources[BIRD_FRAME_LIST[this.textureCounter++]].texture;
         this.sprite.texture = PIXI.Texture.from(this.sprite_ary[this.textureCounter++]);

@@ -45,6 +45,18 @@ container.interactive = true;
 container.visible = true;
 app.stage.addChild(container);
 
+// score
+let container_score = new PIXI.Container();
+container_score.width = STAGES.CANVAS_WIDTH_HEIGHT;
+container_score.height = STAGES.CANVAS_WIDTH_HEIGHT;
+container_score.x = 0;
+container_score.y = 0;
+container_score.pivot.x = 0;
+container_score.pivot.y = 0;
+container_score.interactive = true;
+container_score.visible = true;
+app.stage.addChild(container_score);
+
 // click area
 let hitArea = new PIXI.Graphics();
 hitArea.lineStyle(1, 0xff0033, 1); // width, color, alpha
@@ -55,7 +67,7 @@ hitArea.alpha = 0;
 hitArea.visible = false;
 hitArea.interactive = true;
 hitArea.interactiveChildren = false;
-hitArea.buttonMode = false
+hitArea.buttonMode = true;
 container.addChild(hitArea);
 hitArea.visible = true;
 
@@ -71,7 +83,7 @@ if (button) {
             tubeList.forEach((d, i) => d.reset(TUBE_POS_LIST[i]));
             bird.reset();
             VARS.score = 0;
-            displayScore(container, 2);
+            displayScore(container_score, 2);
         }
         button.classList.add("hide");
     });
@@ -94,7 +106,7 @@ displayParamText(app, ver, 450);
 displayParamText(app, size, 470);
 displayParamText(app, type, 490)
 
-displayScore(container, 0);
+displayScore(container_score, 0);
 
 
 //// Main
@@ -146,7 +158,7 @@ const update = (time) => {
 
 }
 
-tubeList = TUBE_POS_LIST.map((d, idx) => new Tube(container, d, idx, STAGES.CANVAS_WIDTH_HEIGHT, container));
+tubeList = TUBE_POS_LIST.map((d, idx) => new Tube(container, d, idx, STAGES.CANVAS_WIDTH_HEIGHT, container_score));
 
 bird = new Bird(container, BIRD.BIRD_FRAME_LIST, STAGES.CANVAS_WIDTH_HEIGHT, tubeList, () => {
     // console.log("Called when bird hit tube/ground/upper bound");

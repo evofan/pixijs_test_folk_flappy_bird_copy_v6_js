@@ -43,13 +43,13 @@ const RETRY = 2;
  * @param reference
  * @param num
  */
-export const displayScore = (container, num) => {
+export const displayScore = (displayObject, num) => {
 
     if (num !== FIRST) {
         console.log("初回では無いので一旦消す");
         //console.log(app.stage);
         //app.stage.removeChild(text_score);
-        container.removeChild(text_score);
+        displayObject.removeChild(text_score);
         //app.stage.removeChildAt(1);//鳥とチューブbがキえる
         //app.stage.removeChildAt(2);
         //app.stage.removeChildAt(3);
@@ -69,7 +69,7 @@ export const displayScore = (container, num) => {
         lineJoin: "round"
     });
     console.log("表示する");
-    container.addChild(text_score);
+    displayObject.addChild(text_score);
     //container.removeChild(text_score);//ok
     text_score.x = 350;
     text_score.y = 400;
