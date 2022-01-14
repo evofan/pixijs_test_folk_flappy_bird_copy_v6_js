@@ -20,6 +20,9 @@ Add webpack
 Add score display  
 Add background image  
 
+TODO:  
+Adjust the text display position when resizing the stage.  
+
 reference  
 
 **evofan / pixijs_test_folk_flappy_bird_copy**  
