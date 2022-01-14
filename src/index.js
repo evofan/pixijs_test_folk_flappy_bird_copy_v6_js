@@ -31,7 +31,7 @@ let container_bg = new PIXI.Container();
 container_bg.x = 0;
 container_bg.y = 0;
 app.stage.addChild(container_bg);
-displaySprite(app, img_bg, 0, 0);
+displaySprite(app.stage, img_bg, 0, 0);
 
 // bird, wall area
 let container = new PIXI.Container();
