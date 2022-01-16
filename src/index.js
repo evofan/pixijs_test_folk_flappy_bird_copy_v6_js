@@ -1,6 +1,5 @@
 import * as PIXI from "pixi.js";
-import { displayDateText } from "./helper/text.js";
-import { displayParamText } from "./helper/text.js";
+import { displayDateText, displayParamText, displayScoreText } from "./helper/text.js";
 import { displaySprite } from "./helper/sprite.js";
 import { Common } from "./helper/common.js";
 
@@ -83,7 +82,7 @@ if (button) {
             tubeList.forEach((d, i) => d.reset(TUBE_POS_LIST[i]));
             bird.reset();
             VARS.score = 0;
-            displayScore(container_score, 2);
+            displayScoreText(container_score, 2);
         }
         button.classList.add("hide");
     });
@@ -94,7 +93,7 @@ let tubeList;
 
 
 // Execute the method defined in text.js
-displayDateText(app);
+displayDateText(app.stage);
 
 // Execute the method and Read the property defined in common.js
 let ver = Common.pixi_version;
@@ -102,11 +101,11 @@ let size = Common.getAppRenderSize(app);
 let type = Common.getAppRenderType(app);
 
 // display Pixi data
-displayParamText(app, ver, 450);
-displayParamText(app, size, 470);
-displayParamText(app, type, 490)
+displayParamText(app.stage, ver, 450);
+displayParamText(app.stage, size, 470);
+displayParamText(app.stage, type, 490)
 
-displayScore(container_score, 0);
+displayScoreText(container_score, 0);
 
 
 //// Main

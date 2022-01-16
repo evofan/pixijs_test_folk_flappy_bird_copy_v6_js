@@ -3,9 +3,9 @@ import { VARS } from "../constants";
 
 /**
  * Define the displayDateText() function using the export statement.
- * @param { object } app reference
+ * @param { object } displayObject reference
  */
-export const displayDateText = (app) => {
+export const displayDateText = (displayObject) => {
   // Date
   let dt = new Date();
   let year = dt.getFullYear();
@@ -36,16 +36,16 @@ export const displayDateText = (app) => {
   });
   textDate.x = 100;
   textDate.y = 10;
-  app.stage.addChild(textDate);
+  displayObject.addChild(textDate);
 }
 
 /**
  * Define the displayParamText() function using the export statement.
- * @param { object } app reference
+ * @param { object } displayObject reference
  * @param { string } str display text
  * @param { num } y position
  */
-export const displayParamText = (app, str, y) => {
+export const displayParamText = (displayObject, str, y) => {
   let textParam = new PIXI.Text(`${str}`, {
     fontFamily: "Arial",
     fontSize: 16,
@@ -62,28 +62,39 @@ export const displayParamText = (app, str, y) => {
   });
   textParam.x = 15;
   textParam.y = y;
-  app.stage.addChild(textParam);
+  displayObject.addChild(textParam);
 }
 
-/*
-export const displayScore = (app) => {
-  let textParam = new PIXI.Text(`Score: ${VARS.score}`, {
+
+let text_score = 0;
+const START = 0;
+const UPDATE = 1;
+const RETRY = 2;
+/**
+ * Show score num
+ * @param {object} displayObject reference
+ * @param {number} number call timing
+ */
+export const displayScoreText = (displayObject, num) => {
+  if (num !== START) {
+    console.log("初回では無いので一旦消す");
+    displayObject.removeChild(text_score);
+  }
+  text_score = new PIXI.Text(`Score: ${VARS.score}`, {
     fontFamily: "Arial",
     fontSize: 32,
     fill: 0xff0033,
     align: "right",
     fontWeight: "bold",
+    stroke: "#cccccc",
+    stroke: "#ffffff",
+    strokeThickness: 4,
+    dropShadow: false,
+    dropShadowColor: "#666666",
     lineJoin: "round"
   });
-  textParam.x = 350;
-  textParam.y = 450;
-  */
-  /*
-  if (app.stage.getChildByName(textParam)) {
-    app.stage.removeChild(textParam)
-  }*/
- // if (app.stage.getChildAt(0)) {
-   // app.stage.removeChild(textParam)
- // }
- // app.stage.addChild(textParam);
-//}
+  console.log("表示する");
+  displayObject.addChild(text_score);
+  text_score.x = 350;
+  text_score.y = 400;
+};

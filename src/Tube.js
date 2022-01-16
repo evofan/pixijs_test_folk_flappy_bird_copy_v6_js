@@ -1,5 +1,6 @@
 import * as PIXI from "pixi.js";
-import { STAGES, VARS, displayScore } from "./constants";
+import { STAGES, VARS } from "./constants";
+import { displayScoreText } from "./helper/text.js";
 
 export class Tube {
 
@@ -90,7 +91,7 @@ export class Tube {
             this.scoreFlag = false;
             VARS.score = VARS.score + 1;
             console.log("得点追加！", VARS.score);
-            displayScore(this.container_score, 1);
+            displayScoreText(this.container_score, 1);
         }
 
     }
